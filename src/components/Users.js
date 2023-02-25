@@ -1,8 +1,8 @@
 import React from "react";
 import { Table, Button, Form, Modal } from 'react-bootstrap';
+import { API } from "../constants";
 
 class Users extends React.Component{
-
     constructor(props) {
         super(props);
 
@@ -24,7 +24,7 @@ class Users extends React.Component{
     }
 
     searchCompanies = (ids_company_edit = null) => {
-        fetch("http://localhost:8000/company")
+        fetch(`${API['BASE_URL']}/${API['COMPANY']}`)
             .then(response => response.json())
             .then(datas => {
                 let companies_filter = datas.data;
@@ -36,7 +36,7 @@ class Users extends React.Component{
     }
 
     searchUsers = () => {
-        fetch("http://localhost:8000/user")
+        fetch(`${API['BASE_URL']}/${API['USER']}`)
             .then(response => response.json())
             .then(datas => {
                 this.setState({ users: datas.data });
@@ -49,7 +49,7 @@ class Users extends React.Component{
         if(search === '' || search === undefined || search === null || this.state.filter === '' || this.state.filter === undefined || this.state.filter === null)
             this.searchUsers();
 
-        fetch(`http://localhost:8000/user?${this.state.filter}=${search}`)
+        fetch(`${API['BASE_URL']}/${API['USER']}?${this.state.filter}=${search}`)
             .then(response => response.json())
             .then(datas => {
                 let users;
@@ -59,7 +59,7 @@ class Users extends React.Component{
     }
 
     deleteUser = (id) => {
-        fetch("http://localhost:8000/user/"+id, { method: 'DELETE' })
+        fetch(`${API['BASE_URL']}/${API['USER']}/`+id, { method: 'DELETE' })
             .then(response => response.json())
             .then(datas => {
                 if(datas.status === 'success') {
@@ -95,7 +95,7 @@ class Users extends React.Component{
     }
 
     loadUser = (id) => {
-        fetch("http://localhost:8000/user/"+id, { method: 'GET' })
+        fetch(`${API['BASE_URL']}/${API['USER']}/${id}`, { method: 'GET' })
             .then(response => response.json())
             .then(datas => {
                 
@@ -116,7 +116,7 @@ class Users extends React.Component{
     }
 
     createUser = (user) => {
-        fetch("http://localhost:8000/user", {
+        fetch(`${API['BASE_URL']}/${API['USER']}`, {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify(user)
@@ -130,7 +130,7 @@ class Users extends React.Component{
     }
 
     updateUser = (user) => {
-        fetch("http://localhost:8000/user/"+user.id, {
+        fetch(`${API['BASE_URL']}/${API['USER']}/${user.id}`, {
             method: 'PUT',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify(user)
