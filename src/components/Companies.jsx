@@ -2,143 +2,146 @@ import React from "react";
 import { Table, Button, Form, Modal } from 'react-bootstrap';
 import { API } from "../constants";
 
-class Users extends React.Component{
+class Companies extends React.Component{
+
     constructor(props) {
         super(props);
 
         this.state = {
             id: 0,
             name: '',
-            email: '',
-            users: [],
-            companies_selected: [],
+            cnpj: '',
+            address: '',
             companies: [],
+            users_selected: [],
+            users: [],
             modalShow: false,
             filter: ''
         }
     }
 
     componentDidMount() {
-        this.searchUsers();
         this.searchCompanies();
+        this.searchUsers();
     }
 
-    searchCompanies = (ids_company_edit = null) => {
-        fetch(`${API['BASE_URL']}/${API['COMPANY']}`)
-            .then(response => response.json())
-            .then(datas => {
-                let companies_filter = datas.data;
-                if(ids_company_edit!=null)
-                    companies_filter = datas.data.filter(item => !ids_company_edit.includes(item.id))
-
-                this.setState({ companies: companies_filter });
-            })
-    }
-
-    searchUsers = () => {
+    searchUsers = (ids_user_edit = null) => {
         fetch(`${API['BASE_URL']}/${API['USER']}`)
             .then(response => response.json())
             .then(datas => {
-                this.setState({ users: datas.data });
+                let users_filter = datas.data;
+                if(ids_user_edit!=null)
+                    users_filter = datas.data.filter(item => !ids_user_edit.includes(item.id))
+
+                this.setState({ users: users_filter });
             })
     }
 
-    searchUsersWithParams = (event) => {
+    searchCompanies = () => {
+        fetch(`${API['BASE_URL']}/${API['COMPANY']}`)
+            .then(response => response.json())
+            .then(datas => {
+                this.setState({ companies: datas.data });
+            })
+    }
+
+    searchCompaniesWithParams = (event) => {
         let search = event.target.value;
 
         if(search === '' || search === undefined || search === null || this.state.filter === '' || this.state.filter === undefined || this.state.filter === null)
             this.searchUsers();
 
-        fetch(`${API['BASE_URL']}/${API['USER']}?${this.state.filter}=${search}`)
+        fetch(`${API['BASE_URL']}/${API['COMPANY']}?${this.state.filter}=${search}`)
             .then(response => response.json())
             .then(datas => {
-                let users;
-                (datas.data.length == undefined) ? users = [datas.data] : users = datas.data;
-                this.setState({ users: users });
+                let companies;
+                (datas.data.length == undefined) ? companies = [datas.data] : companies = datas.data;
+                this.setState({ companies: companies })
             })
     }
 
-    deleteUser = (id) => {
-        fetch(`${API['BASE_URL']}/${API['USER']}/`+id, { method: 'DELETE' })
+    deleteCompany = (id) => {
+        fetch(`${API['BASE_URL']}/${API['COMPANY']}/${id}`, { method: 'DELETE' })
             .then(response => response.json())
             .then(datas => {
                 if(datas.status === 'success') {
-                    this.searchUsers();
+                    this.searchCompanies();
                 }
             })
     }
 
-    deleteCompany = (company_add) => {
-        let new_companies = this.state.companies;
-        new_companies.push(company_add);
+    deleteUser = (user_add) => {
+        let new_users = this.state.users;
+        new_users.push(user_add);
 
         this.setState(
             {
-                companies_selected: this.state.companies_selected.filter(company => company.id != company_add.id),
-                companies: new_companies
+                users_selected: this.state.users_selected.filter(user => user.id != user_add.id),
+                users: new_users
 
             }
         )
     }
 
-    addCompany = (company_add) => {
-        let new_companies = this.state.companies_selected;
-        new_companies.push(company_add);
+    addUser = (user_add) => {
+        let new_users = this.state.users_selected;
+        new_users.push(user_add);
 
         this.setState(
             {
-                companies_selected: new_companies,
-                companies: this.state.companies.filter(company => company.id != company_add.id),
+                users_selected: new_users,
+                users: this.state.users.filter(user => user.id != user_add.id),
 
             }
         )
     }
 
-    loadUser = (id) => {
-        fetch(`${API['BASE_URL']}/${API['USER']}/${id}`, { method: 'GET' })
+    loadCompany = (id) => {
+        fetch(`${API['BASE_URL']}/${API['COMPANY']}/${id}`, { method: 'GET' })
             .then(response => response.json())
             .then(datas => {
                 
                 this.setState({ 
                     id: datas.data.id,
                     name: datas.data.name,
-                    email: datas.data.email,
-                    companies_selected: datas.data.companies,
+                    cnpj: datas.data.cnpj,
+                    address: datas.data.address,
+                    users_selected: datas.data.users,
                  })
 
-                let ids_company_edit = datas.data.companies.map(function(company) {
-                    return company.id;
+                let ids_user_edit = datas.data.users.map(function(user) {
+                    return user.id;
                 });
 
                  this.handleOpen();
-                 this.searchCompanies(ids_company_edit);
+                 this.searchUsers(ids_user_edit);
             })
     }
 
-    createUser = (user) => {
-        fetch(`${API['BASE_URL']}/${API['USER']}`, {
+    createCompany = (company) => {
+        fetch(`${API['BASE_URL']}/${API['COMPANY']}`, {
             method: 'POST',
             headers: {'Content-Type':'application/json'},
-            body: JSON.stringify(user)
+            body: JSON.stringify(company)
         })
         .then(response => response.json())
         .then(datas => {
             if(datas.status === 'success') {
-                this.searchUsers();
+                this.searchCompanies();
             }
         })
     }
 
-    updateUser = (user) => {
-        fetch(`${API['BASE_URL']}/${API['USER']}/${user.id}`, {
+    updateCompany = (company) => {
+        fetch(`${API['BASE_URL']}/${API['COMPANY']}/${company.id}`, {
             method: 'PUT',
             headers: {'Content-Type':'application/json'},
-            body: JSON.stringify(user)
+            body: JSON.stringify(company)
         })
         .then(response => response.json())
         .then(datas => {
             if(datas.status === 'success') {
-                this.searchUsers();
+                this.searchCompanies();
             }
         })
     }
@@ -148,19 +151,21 @@ class Users extends React.Component{
             <thead>
                 <tr>
                     <th>Nome</th>
-                    <th>E-mail</th>
+                    <th>Cnpj</th>
+                    <th>Endereço</th>
                     <th>Opções</th>
                 </tr>
             </thead>
             <tbody>
                 {
-                    this.state.users.map((user, index) =>
+                    this.state.companies.map((company, index) =>
                         <tr key={index}>
-                            <td>{user.name}</td>
-                            <td>{user.email}</td>
+                            <td>{company.name}</td>
+                            <td>{company.cnpj}</td>
+                            <td>{company.address}</td>
                             <td>
-                                <Button variant="secondary" onClick={() => this.loadUser(user.id)}>Editar</Button>
-                                <Button variant="danger" onClick={() => this.deleteUser(user.id)}>Excluir</Button>
+                                <Button variant="secondary" onClick={() => this.loadCompany(company.id)}>Editar</Button>
+                                <Button variant="danger" onClick={() => this.deleteCompany(company.id)}>Excluir</Button>
                             </td>
                         </tr>
                     )
@@ -185,6 +190,22 @@ class Users extends React.Component{
         )
     }
 
+    updateCnpj = (event) => {
+        this.setState(
+            {
+                cnpj: event.target.value
+            }
+        )
+    }
+
+    updateAddress = (event) => {
+        this.setState(
+            {
+                address: event.target.value
+            }
+        )
+    }
+
     updateFilter = (event) => {
         this.setState(
             {
@@ -194,34 +215,29 @@ class Users extends React.Component{
     }
 
     submit = () => {
-        let ids_company_save = this.state.companies_selected.map(function(company) {
-            return company.id;
+        let ids_user_save = this.state.users_selected.map(function(user) {
+            return user.id;
         });
 
-
         if(this.state.id == 0) {
-            const user = {
+            const company = {
                 name: this.state.name,
-                email: this.state.email,
-                phone: '383333333',
-                date: '2023-02-22',
-                city: 'Montes Claros',
-                company_ids: ids_company_save
+                cnpj: this.state.cnpj,
+                address: this.state.address,
+                user_ids: ids_user_save
             };
     
-            this.createUser(user);
+            this.createCompany(company);
         } else {
-            const user = {
+            const company = {
                 id: this.state.id,
                 name: this.state.name,
-                email: this.state.email,
-                phone: '383333333',
-                date: '2023-02-22',
-                city: 'Montes Claros',
-                company_ids: ids_company_save
+                cnpj: this.state.cnpj,
+                address: this.state.address,
+                user_ids: ids_user_save
             };
     
-            this.updateUser(user);
+            this.updateCompany(company);
         }
         this.handleClose();
     }
@@ -231,11 +247,12 @@ class Users extends React.Component{
             {
                 id: 0,
                 name: '',
-                email: '',
-                companies_selected: []
+                cnpj: '',
+                address: '',
+                users_ids: []
             }
         )
-        this.searchCompanies();
+        this.searchUsers();
         this.handleOpen();
     }
 
@@ -275,30 +292,31 @@ class Users extends React.Component{
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="formBasicEmail">
-                                <Form.Label>E-mail</Form.Label>
-                                <Form.Control type="email" placeholder="Preencha o e-mail" value={this.state.email} onChange={this.updateEmail}/>
+                                <Form.Label>Cnpj</Form.Label>
+                                <Form.Control type="text" placeholder="Preencha o cnpj" value={this.state.cnpj} onChange={this.updateCnpj}/>
+                            </Form.Group>
+
+                            <Form.Group className="mb-3" controlId="formBasicEmail">
+                                <Form.Label>Endereço</Form.Label>
+                                <Form.Control type="text" placeholder="Preencha o endereço" value={this.state.address} onChange={this.updateAddress}/>
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="formBasicTable">
-                                <Form.Label>Empresas</Form.Label>
+                                <Form.Label>Usuários</Form.Label>
                                 <Table striped bordered hover>
                                     <thead>
                                         <tr>
                                             <th>Nome</th>
-                                            <th>CNPJ</th>
-                                            <th>Endereço</th>
                                             <th>Opções</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     {
-                                        this.state.companies.map((company, index) =>
+                                        this.state.users.map((user, index) =>
                                             <tr key={index}>
-                                                <td>{company.name}</td>
-                                                <td>{company.cnpj}</td>
-                                                <td>{company.address}</td>
+                                                <td>{user.name}</td>
                                                 <td>
-                                                    <Button variant="success" onClick={() => this.addCompany(company)}>Adicionar</Button>
+                                                    <Button variant="success" onClick={() => this.addUser(user)}>Adicionar</Button>
                                                 </td>
                                             </tr>
                                         )
@@ -308,25 +326,21 @@ class Users extends React.Component{
                             </Form.Group>
                             
                             <Form.Group className="mb-3" controlId="formBasicTable">
-                                <Form.Label>Empresas selecionadas</Form.Label>
+                                <Form.Label>Usuários selecionadas</Form.Label>
                                 <Table striped bordered hover>
                                     <thead>
                                         <tr>
                                             <th>Nome</th>
-                                            <th>CNPJ</th>
-                                            <th>Endereço</th>
                                             <th>Opções</th>
                                         </tr>
                                     </thead>
                                     <tbody>
                                     {
-                                        this.state.companies_selected.map((company, index) =>
+                                        this.state.users_selected.map((user, index) =>
                                             <tr key={index}>
-                                                <td>{company.name}</td>
-                                                <td>{company.cnpj}</td>
-                                                <td>{company.address}</td>
+                                                <td>{user.name}</td>
                                                 <td>
-                                                    <Button variant="danger" onClick={() => this.deleteCompany(company)}>Remover</Button>
+                                                    <Button variant="danger" onClick={() => this.deleteUser(user)}>Remover</Button>
                                                 </td>
                                             </tr>
                                         )
@@ -352,16 +366,14 @@ class Users extends React.Component{
 
                 <Form>
                     <Form.Group className="mb-3" controlId="formBasicName">
-                        <Form.Control type="text" placeholder="Buscar" onChange={this.searchUsersWithParams}/>
+                        <Form.Control type="text" placeholder="Buscar" onChange={this.searchCompaniesWithParams}/>
 
                         <Form.Select aria-label="filter" value={this.state.filter} onChange={this.updateFilter}>
                             <option>Campo</option>
                             <option value="name">Nome</option>
-                            <option value="email">E-mail</option>
-                            <option value="phone">Telefone</option>
-                            <option value="date">Data</option>
-                            <option value="city">Cidade</option>
-                            <option value="company">Empresa</option>
+                            <option value="cnpj">Cnpj</option>
+                            <option value="address">Endereço</option>
+                            <option value="user">Usuário</option>
                         </Form.Select>
                     </Form.Group>
                 </Form>
@@ -372,4 +384,4 @@ class Users extends React.Component{
     }
 }
 
-export default Users;
+export default Companies;

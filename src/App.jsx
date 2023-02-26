@@ -5,6 +5,7 @@ import About from './components/About';
 import {BrowserRouter, Routes, Link, Route} from 'react-router-dom';
 import {Nav} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
+import { Teste } from 'components/Teste';
 
 function App() {
   return (
@@ -23,6 +24,7 @@ function App() {
         <Route path="/usuarios" element={<Users/>}></Route>
         <Route path="/empresas" element={<Companies/>}></Route>
         <Route path="/sobre" element={<About/>}></Route>
+        <Route path="/teste" element={<Teste/>}></Route>
       </Routes>
       </BrowserRouter>
     </div>
