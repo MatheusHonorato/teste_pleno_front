@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Button, Form, Modal, Alert } from 'react-bootstrap';
+import { Table, Button, Form, Modal, Alert, Row, Col } from 'react-bootstrap';
 import { API } from "../constants";
 
 class Companies extends React.Component{
@@ -169,7 +169,7 @@ class Companies extends React.Component{
                     <th>Nome</th>
                     <th>Cnpj</th>
                     <th>Endereço</th>
-                    <th>Opções</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
@@ -179,9 +179,9 @@ class Companies extends React.Component{
                             <td>{company.name}</td>
                             <td>{company.cnpj}</td>
                             <td>{company.address}</td>
-                            <td>
+                            <td className="d-flex justify-content-center">
                                 <Button variant="secondary" onClick={() => this.loadCompany(company.id)}>Editar</Button>
-                                <Button variant="danger" onClick={() => this.handleOpenRemove(company.id)}>Excluir</Button>
+                                <Button variant="danger" onClick={() => this.handleOpenRemove(company.id)} className="ms-2">Excluir</Button>
                             </td>
                         </tr>
                     )
@@ -498,7 +498,7 @@ class Companies extends React.Component{
                                         <tr>
                                             <th>Nome</th>
                                             <th>E-mail</th>
-                                            <th>Opções</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -528,7 +528,7 @@ class Companies extends React.Component{
                                         <tr>
                                             <th>Nome</th>
                                             <th>E-mail</th>
-                                            <th>Opções</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -558,23 +558,34 @@ class Companies extends React.Component{
                     </Modal.Footer>
                 </Modal>
                 
-                <Button variant="warning" type="button" onClick={this.reset}>
-                    Novo
-                </Button>
-
-                <Form>
-                    <Form.Group className="mb-3" controlId="formBasicName">
-                        <Form.Control type="text" placeholder="Buscar" value={this.state.search} onChange={this.searchCompaniesWithParams}/>
-
-                        <Form.Select aria-label="filter" value={this.state.filter} onChange={this.updateFilter}>
-                            <option value="name">Campo</option>
-                            <option value="name">Nome</option>
-                            <option value="cnpj">Cnpj</option>
-                            <option value="address">Endereço</option>
-                            <option value="user">Usuário</option>
-                        </Form.Select>
-                    </Form.Group>
-                </Form>
+                <Row>
+                    <Col>
+                        <Button variant="warning" type="button" onClick={this.reset}>
+                            Novo
+                        </Button>
+                    </Col>
+                     <Col>
+                        <Form>
+                            <Form.Group className="mb-3" controlId="formBasicName">
+                                <Row>
+                                    <Col>
+                                        <Form.Control type="text" placeholder="Buscar" value={this.state.search} onChange={this.searchCompaniesWithParams}/>
+                                    </Col>
+                                    <Col>
+                                        <Form.Select aria-label="filter" value={this.state.filter} onChange={this.updateFilter}>
+                                            <option value="name">Campo</option>
+                                            <option value="name">Nome</option>
+                                            <option value="cnpj">Cnpj</option>
+                                            <option value="address">Endereço</option>
+                                            <option value="user">Usuário</option>
+                                        </Form.Select>
+                                    </Col>
+                                </Row>
+                                
+                            </Form.Group>
+                        </Form>
+                    </Col>
+                </Row>
 
                 {this.renderTable()}
             </div>
