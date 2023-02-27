@@ -272,7 +272,6 @@ class Users extends React.Component{
             }
 
             if(field.name === 'email') {
-                console.log(this.state['atual_email'])
                 const element = this.state.users.find(objeto => objeto.email === this.state[field.name]);
 
                 if(element && element.email == this.state.email && this.state.email != this.state['atual_email']) {
@@ -282,7 +281,6 @@ class Users extends React.Component{
                             validatedEmailUnique: false
                         });
                 } else {
-                    console.log('caiu no else');
                     this.setState(
                     {
                         validated: false,
@@ -298,7 +296,6 @@ class Users extends React.Component{
         fields_validations.map((field) => {
             if(this.state[field.name].length == 0) {
                 fields_flag = false;
-                return;
             }
 
             if(field.name === 'email') {
@@ -306,11 +303,8 @@ class Users extends React.Component{
 
                 if(element && element.email == this.state.email && this.state.email != this.state['atual_email']) {
                     fields_flag = false;
-                    return;
                 }
             }
-
-           console.log(this.state.validatedEmailUnique);
         });
 
         if(!fields_flag)
@@ -325,7 +319,7 @@ class Users extends React.Component{
                 name: this.state.name,
                 email: this.state.email,
                 phone: this.state.phone,
-                date: this.state.date,
+                date: (this.state.date == '') ? null : this.state.date,
                 city: this.state.city,
                 company_ids: ids_company_save
             };
@@ -337,7 +331,7 @@ class Users extends React.Component{
                 name: this.state.name,
                 email: this.state.email,
                 phone: this.state.phone,
-                date: this.state.date,
+                date: (this.state.date == '') ? null : this.state.date,
                 city: this.state.city,
                 company_ids: ids_company_save
             };
@@ -389,11 +383,6 @@ class Users extends React.Component{
                     </Modal.Header>
                     <Modal.Body>
                         <Form noValidate validated={this.state.validated}>
-                            {/*<Form.Group className="mb-3" controlId="formBasicId">
-                                <Form.Label>Id</Form.Label>
-                                <Form.Control type="text" value={this.state.id} readOnly={true} disabled={true}/>
-                            </Form.Group>*/}
-
                             <Form.Group className="mb-3" controlId="formBasicName">
                                 <Form.Label>Nome</Form.Label>
                                 <Form.Control type="text" placeholder="Preencha o nome" value={this.state.name} onChange={this.updateName} required/>
