@@ -10,7 +10,7 @@ import { Teste } from 'components/Teste';
 function App() {
   return (
     <div className="App">
-      <h1>Minha aplicação React</h1>
+      <h1>Desafio | Fullstack</h1>
       <BrowserRouter>
       <Nav variant="tabs">
         <Nav.Link as={Link} to="/">Página Inicial</Nav.Link>
@@ -24,7 +24,6 @@ function App() {
         <Route path="/usuarios" element={<Users/>}></Route>
         <Route path="/empresas" element={<Companies/>}></Route>
         <Route path="/sobre" element={<About/>}></Route>
-        <Route path="/teste" element={<Teste/>}></Route>
       </Routes>
       </BrowserRouter>
     </div>

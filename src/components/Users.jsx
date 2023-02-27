@@ -16,11 +16,13 @@ class Users extends React.Component{
             users: [],
             companies_selected: [],//selected_companies
             companies: [],
+            emails: [],
             modalShow: false,
             filter: '',
             validated: false,
             validatedName: true,
             validatedEmail: true,
+            validatedEmailUnique: true,
             validatedPhone: true,
             validatedDate: true,
             validatedCity: true,
@@ -113,6 +115,7 @@ class Users extends React.Component{
                     id: datas.data.id,
                     name: datas.data.name,
                     email: datas.data.email,
+                    atual_email: datas.data.email,
                     phone: datas.data.phone,
                     date: datas.data.date,
                     city: datas.data.city,
@@ -215,7 +218,7 @@ class Users extends React.Component{
     updateDate = (event) => {
         this.setState(
             {
-                date: event.target.date
+                date: event.target.value
             }
         )
     }
@@ -223,7 +226,7 @@ class Users extends React.Component{
     updateCity = (event) => {
         this.setState(
             {
-                city: event.target.city
+                city: event.target.value
             }
         )
     }
@@ -244,7 +247,8 @@ class Users extends React.Component{
             },
             {
                 name: 'email',
-                validatedKey: 'validatedEmail'
+                validatedKey: 'validatedEmail',
+                validatedKeyUnique: 'validatedEmailUnique'
             },
             {
                 name: 'companies_selected',
@@ -266,6 +270,27 @@ class Users extends React.Component{
                     [field.validatedKey]: true
                 });
             }
+
+            if(field.name === 'email') {
+                console.log(this.state['atual_email'])
+                const element = this.state.users.find(objeto => objeto.email === this.state[field.name]);
+
+                if(element && element.email == this.state.email && this.state.email != this.state['atual_email']) {
+                    this.setState(
+                        {
+                            validated: false,
+                            validatedEmailUnique: false
+                        });
+                } else {
+                    console.log('caiu no else');
+                    this.setState(
+                    {
+                        validated: false,
+                        validatedEmailUnique: true
+                    });
+                }
+            }
+
         });
 
         let fields_flag = true;
@@ -275,6 +300,17 @@ class Users extends React.Component{
                 fields_flag = false;
                 return;
             }
+
+            if(field.name === 'email') {
+                const element = this.state.users.find(objeto => objeto.email === this.state[field.name]);
+
+                if(element && element.email == this.state.email && this.state.email != this.state['atual_email']) {
+                    fields_flag = false;
+                    return;
+                }
+            }
+
+           console.log(this.state.validatedEmailUnique);
         });
 
         if(!fields_flag)
@@ -317,6 +353,7 @@ class Users extends React.Component{
                 id: 0,
                 name: '',
                 email: '',
+                atual_email: '',
                 phone: '',
                 date: '',
                 city: '',
@@ -370,6 +407,10 @@ class Users extends React.Component{
                                 <Form.Control type="email" placeholder="Preencha o e-mail" value={this.state.email} onChange={this.updateEmail} required/>
                                 {
                                     !this.state.validatedEmail ? <div type="invalid" className="invalid-feedback-custom">O campo e-mail é obrigatório.</div> : ''
+                                
+                                }
+                                {
+                                    !this.state.validatedEmailUnique ? <div type="invalid" className="invalid-feedback-custom">O endereço de e-mail já está sendo utilizado.</div> : ''
                                 }
                             </Form.Group>
 
@@ -379,7 +420,7 @@ class Users extends React.Component{
                             </Form.Group>
 
                             <Form.Group className="mb-3" controlId="formBasicDate">
-                                <Form.Label>Data {this.state.date}</Form.Label>
+                                <Form.Label>Data de nascimento</Form.Label>
                                 <Form.Control type="date" value={this.state.date} onChange={this.updateDate}/>
                             </Form.Group>
 
