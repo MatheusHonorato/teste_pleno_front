@@ -16,7 +16,6 @@ class Users extends React.Component{
             users: [],
             selected_companies: [],
             companies: [],
-            emails: [],
             modalShow: false,
             modalShowRemove: false,
             filter: 'name',
@@ -590,7 +589,7 @@ class Users extends React.Component{
                         <Form.Control type="text" placeholder="Buscar" value={this.state.search} onChange={this.searchUsersWithParams}/>
 
                         <Form.Select aria-label="filter" value={this.state.filter} onChange={this.updateFilter}>
-                            <option name="name">Campo</option>
+                            <option value="name">Campo</option>
                             <option value="name">Nome</option>
                             <option value="email">E-mail</option>
                             <option value="phone">Telefone</option>
