@@ -14,7 +14,7 @@ class Users extends React.Component{
             date: '',
             city: '',
             users: [],
-            companies_selected: [],//selected_companies
+            selected_companies: [],
             companies: [],
             emails: [],
             modalShow: false,
@@ -88,7 +88,7 @@ class Users extends React.Component{
 
         this.setState(
             {
-                companies_selected: this.state.companies_selected.filter(company => company.id != company_add.id),
+                selected_companies: this.state.selected_companies.filter(company => company.id != company_add.id),
                 companies: new_companies
 
             }
@@ -96,12 +96,12 @@ class Users extends React.Component{
     }
 
     addCompany = (company_add) => {
-        let new_companies = this.state.companies_selected;
+        let new_companies = this.state.selected_companies;
         new_companies.push(company_add);
 
         this.setState(
             {
-                companies_selected: new_companies,
+                selected_companies: new_companies,
                 companies: this.state.companies.filter(company => company.id != company_add.id),
 
             }
@@ -121,7 +121,7 @@ class Users extends React.Component{
                     phone: datas.data.phone,
                     date: datas.data.date,
                     city: datas.data.city,
-                    companies_selected: datas.data.companies,
+                    selected_companies: datas.data.companies,
                  })
 
                 let ids_company_edit = datas.data.companies.map(function(company) {
@@ -252,7 +252,7 @@ class Users extends React.Component{
                 validatedKeyFormat: 'validatedEmailFormat'
             },
             {
-                name: 'companies_selected',
+                name: 'selected_companies',
                 validatedKey: 'validatedCompany'
             }
         ];
@@ -331,7 +331,7 @@ class Users extends React.Component{
         if(!fields_flag)
             return;
 
-        let ids_company_save = this.state.companies_selected.map(function(company) {
+        let ids_company_save = this.state.selected_companies.map(function(company) {
             return company.id;
         });
 
@@ -377,7 +377,7 @@ class Users extends React.Component{
                 phone: '',
                 date: '',
                 city: '',
-                companies_selected: [],
+                selected_companies: [],
                 validated: false,
                 validatedName: true,
                 validatedEmail: true,
@@ -506,7 +506,7 @@ class Users extends React.Component{
                                     </thead>
                                     <tbody>
                                     {
-                                        this.state.companies_selected.map((company, index) =>
+                                        this.state.selected_companies.map((company, index) =>
                                             <tr key={index}>
                                                 <td>{company.name}</td>
                                                 <td>{company.cnpj}</td>
