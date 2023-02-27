@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Button, Form, Modal } from 'react-bootstrap';
+import { Table, Button, Form, Modal, Alert } from 'react-bootstrap';
 import { API } from "../constants";
 
 class Users extends React.Component{
@@ -23,10 +23,12 @@ class Users extends React.Component{
             validatedName: true,
             validatedEmail: true,
             validatedEmailUnique: true,
+            validatedEmailFormat: true,
             validatedPhone: true,
             validatedDate: true,
             validatedCity: true,
-            validatedCompany: true
+            validatedCompany: true,
+            dNoneCustom: true
         }
     }
 
@@ -110,7 +112,7 @@ class Users extends React.Component{
         fetch(`${API['BASE_URL']}/${API['USER']}/${id}`, { method: 'GET' })
             .then(response => response.json())
             .then(datas => {
-                
+                this.reset();
                 this.setState({ 
                     id: datas.data.id,
                     name: datas.data.name,
@@ -125,9 +127,7 @@ class Users extends React.Component{
                 let ids_company_edit = datas.data.companies.map(function(company) {
                     return company.id;
                 });
-
-                 this.handleOpen();
-                 this.searchCompanies(ids_company_edit);
+                this.searchCompanies(ids_company_edit);
             })
     }
 
@@ -248,7 +248,8 @@ class Users extends React.Component{
             {
                 name: 'email',
                 validatedKey: 'validatedEmail',
-                validatedKeyUnique: 'validatedEmailUnique'
+                validatedKeyUnique: 'validatedEmailUnique',
+                validatedKeyFormat: 'validatedEmailFormat'
             },
             {
                 name: 'companies_selected',
@@ -273,6 +274,21 @@ class Users extends React.Component{
 
             if(field.name === 'email') {
                 const element = this.state.users.find(objeto => objeto.email === this.state[field.name]);
+
+                const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                if(!regex.test(this.state.email))
+                    this.setState(
+                    {
+                        validated: false,
+                        validatedEmailFormat: false
+                    });
+                if(regex.test(this.state.email))
+                    this.setState(
+                    {
+                        validated: false,
+                        validatedEmailFormat: true
+                    });
 
                 if(element && element.email == this.state.email && this.state.email != this.state['atual_email']) {
                     this.setState(
@@ -299,6 +315,11 @@ class Users extends React.Component{
             }
 
             if(field.name === 'email') {
+                const regex = /^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/;
+
+                if(!regex.test(this.state.email))
+                    fields_flag = false;
+
                 const element = this.state.users.find(objeto => objeto.email === this.state[field.name]);
 
                 if(element && element.email == this.state.email && this.state.email != this.state['atual_email']) {
@@ -339,6 +360,11 @@ class Users extends React.Component{
             this.updateUser(user);
         }
         this.handleClose();
+        this.setState(
+            {
+                dNoneCustom: false
+            });
+        
     }
 
     reset = () =>  {
@@ -351,7 +377,17 @@ class Users extends React.Component{
                 phone: '',
                 date: '',
                 city: '',
-                companies_selected: []
+                companies_selected: [],
+                validated: false,
+                validatedName: true,
+                validatedEmail: true,
+                validatedEmailUnique: true,
+                validatedEmailFormat: true,
+                validatedPhone: true,
+                validatedDate: true,
+                validatedCity: true,
+                validatedCompany: true,
+                dNoneCustom: true
             }
         )
         this.searchCompanies();
@@ -377,6 +413,10 @@ class Users extends React.Component{
     render() {
         return(
             <div>
+                {
+                    (this.state.validated == false && this.state.dNoneCustom == false) ? <Alert key='success' variant='success' show="true">Operação efetuada com sucesso!</Alert> : ''
+                }
+                
                 <Modal show={this.state.modalShow} onHide={this.handleClose}>
                     <Modal.Header closeButton>
                     <Modal.Title>Dados do usuário</Modal.Title>
@@ -400,6 +440,9 @@ class Users extends React.Component{
                                 }
                                 {
                                     !this.state.validatedEmailUnique ? <div type="invalid" className="invalid-feedback-custom">O endereço de e-mail já está sendo utilizado.</div> : ''
+                                }
+                                {
+                                    !this.state.validatedEmailFormat ? <div type="invalid" className="invalid-feedback-custom">O valor não é um endereço de e-mail válido.</div> : ''
                                 }
                             </Form.Group>
 
