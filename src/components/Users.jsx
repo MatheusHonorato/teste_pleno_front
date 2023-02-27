@@ -174,8 +174,6 @@ class Users extends React.Component{
                     <th>Telefone</th>
                     <th>Nascimento</th>
                     <th>Cidade</th>
-
-                    <th>Opções</th>
                 </tr>
             </thead>
             <tbody>
@@ -524,7 +522,7 @@ class Users extends React.Component{
                                             <th>Nome</th>
                                             <th>CNPJ</th>
                                             <th>Endereço</th>
-                                            <th>Opções</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
@@ -556,7 +554,7 @@ class Users extends React.Component{
                                             <th>Nome</th>
                                             <th>CNPJ</th>
                                             <th>Endereço</th>
-                                            <th>Opções</th>
+                                            <th></th>
                                         </tr>
                                     </thead>
                                     <tbody>
