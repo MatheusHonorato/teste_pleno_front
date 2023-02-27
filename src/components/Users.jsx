@@ -1,5 +1,5 @@
 import React from "react";
-import { Table, Button, Form, Modal, Alert } from 'react-bootstrap';
+import { Table, Button, Form, Modal, Alert, Row, Col } from 'react-bootstrap';
 import { API } from "../constants";
 
 class Users extends React.Component{
@@ -171,6 +171,10 @@ class Users extends React.Component{
                 <tr>
                     <th>Nome</th>
                     <th>E-mail</th>
+                    <th>Telefone</th>
+                    <th>Nascimento</th>
+                    <th>Cidade</th>
+
                     <th>Opções</th>
                 </tr>
             </thead>
@@ -180,9 +184,12 @@ class Users extends React.Component{
                         <tr key={index}>
                             <td>{user.name}</td>
                             <td>{user.email}</td>
-                            <td>
+                            <td>{user.phone}</td>
+                            <td>{user.date}</td>
+                            <td>{user.city}</td>
+                            <td className="d-flex justify-content-center">
                                 <Button variant="secondary" onClick={() => this.loadUser(user.id)}>Editar</Button>
-                                <Button variant="danger" onClick={() => this.handleOpenRemove(user.id)}>Excluir</Button>
+                                <Button variant="danger" onClick={() => this.handleOpenRemove(user.id)} className="ms-2">Excluir</Button>
                             </td>
                         </tr>
                     )
@@ -446,7 +453,7 @@ class Users extends React.Component{
 
     render() {
         return(
-            <div>
+            <div className="component">
                 <Modal show={this.state.modalShowRemove} onHide={this.state.modalShowRemove}>
                     <Modal.Header>
                     <Modal.Title>Excluir</Modal.Title>
@@ -579,26 +586,36 @@ class Users extends React.Component{
                         </Button>
                     </Modal.Footer>
                 </Modal>
-                
-                <Button variant="warning" type="button" onClick={this.reset}>
-                    Novo
-                </Button>
 
-                <Form>
-                    <Form.Group className="mb-3" controlId="formBasicName">
-                        <Form.Control type="text" placeholder="Buscar" value={this.state.search} onChange={this.searchUsersWithParams}/>
-
-                        <Form.Select aria-label="filter" value={this.state.filter} onChange={this.updateFilter}>
-                            <option value="name">Campo</option>
-                            <option value="name">Nome</option>
-                            <option value="email">E-mail</option>
-                            <option value="phone">Telefone</option>
-                            <option value="date">Data</option>
-                            <option value="city">Cidade</option>
-                            <option value="company">Empresa</option>
-                        </Form.Select>
-                    </Form.Group>
-                </Form>
+                <Row>
+                    <Col>
+                        <Button variant="warning" type="button" onClick={this.reset}>
+                            Novo
+                        </Button>
+                    </Col>
+                    <Col>
+                        <Form>
+                            <Form.Group className="mb-3" controlId="formBasicName">
+                                <Row>
+                                    <Col>
+                                        <Form.Control type="text" placeholder="Buscar..." value={this.state.search} onChange={this.searchUsersWithParams}/>
+                                    </Col>
+                                    <Col>
+                                        <Form.Select aria-label="filter" value={this.state.filter} onChange={this.updateFilter}>
+                                            <option value="name">Campo</option>
+                                            <option value="name">Nome</option>
+                                            <option value="email">E-mail</option>
+                                            <option value="phone">Telefone</option>
+                                            <option value="date">Data</option>
+                                            <option value="city">Cidade</option>
+                                            <option value="company">Empresa</option>
+                                        </Form.Select>
+                                    </Col>
+                                </Row>
+                            </Form.Group>
+                        </Form>
+                    </Col>
+                </Row>
 
                 {this.renderTable()}
             </div>

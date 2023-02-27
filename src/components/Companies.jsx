@@ -435,7 +435,7 @@ class Companies extends React.Component{
 
     render() {
         return(
-            <div>
+            <div className="component">
                 <Modal show={this.state.modalShowRemove} onHide={this.state.modalShowRemove}>
                     <Modal.Header>
                     <Modal.Title>Excluir</Modal.Title>
