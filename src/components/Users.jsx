@@ -18,7 +18,9 @@ class Users extends React.Component{
             companies: [],
             emails: [],
             modalShow: false,
-            filter: '',
+            modalShowRemove: false,
+            filter: 'name',
+            search: '',
             validated: false,
             validatedName: true,
             validatedEmail: true,
@@ -58,12 +60,17 @@ class Users extends React.Component{
     }
 
     searchUsersWithParams = (event) => {
-        let search = event.target.value;
+        if(event != undefined && 'target' in event)
+            this.setState(
+                {
+                    search: event.target.value
+                }
+            )
 
-        if(search === '' || search === undefined || search === null || this.state.filter === '' || this.state.filter === undefined || this.state.filter === null)
+        if(this.state.search === '' || this.state.search === undefined || this.state.search === null || this.state.filter === '' || this.state.filter === undefined || this.state.filter === null)
             this.searchUsers();
 
-        fetch(`${API['BASE_URL']}/${API['USER']}?${this.state.filter}=${search}`)
+        fetch(`${API['BASE_URL']}/${API['USER']}?${this.state.filter}=${this.state.search}`)
             .then(response => response.json())
             .then(datas => {
                 let users;
@@ -146,7 +153,7 @@ class Users extends React.Component{
     }
 
     updateUser = (user) => {
-        fetch(`${API['BASE_URL']}/${API['USER']}/${user.id}`, {
+        fetch(`${API['BASE_URL']}/${API['USER']}/${this.state.id}`, {
             method: 'PUT',
             headers: {'Content-Type':'application/json'},
             body: JSON.stringify(user)
@@ -176,7 +183,7 @@ class Users extends React.Component{
                             <td>{user.email}</td>
                             <td>
                                 <Button variant="secondary" onClick={() => this.loadUser(user.id)}>Editar</Button>
-                                <Button variant="danger" onClick={() => this.deleteUser(user.id)}>Excluir</Button>
+                                <Button variant="danger" onClick={() => this.handleOpenRemove(user.id)}>Excluir</Button>
                             </td>
                         </tr>
                     )
@@ -237,6 +244,7 @@ class Users extends React.Component{
                 filter: event.target.value
             }
         )
+        this.searchUsersWithParams();
     }
 
     submit = () => {
@@ -348,7 +356,6 @@ class Users extends React.Component{
             this.createUser(user);
         } else {
             const user = {
-                id: this.state.id,
                 name: this.state.name,
                 email: this.state.email,
                 phone: this.state.phone,
@@ -410,9 +417,51 @@ class Users extends React.Component{
         )
     }
 
+    handleCloseRemove = () => {
+        this.setState(
+            {
+                modalShowRemove: false
+            }
+        )
+    }
+
+    handleOpenRemove = (id) => {
+        this.setState(
+            {
+                id: id,
+                modalShowRemove: true
+            }
+        )
+    }
+
+    handleSaveRemove = () => {
+        this.deleteUser(this.state.id);
+        this.setState(
+            {
+                modalShowRemove: false,
+                dNoneCustom: false
+            }
+        )
+        this.handleCloseRemove();
+    }
+
     render() {
         return(
             <div>
+                <Modal show={this.state.modalShowRemove} onHide={this.state.modalShowRemove}>
+                    <Modal.Header>
+                    <Modal.Title>Excluir</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>Deseja remover o item?</Modal.Body>
+                    <Modal.Footer>
+                    <Button variant="secondary" onClick={this.handleCloseRemove}>
+                        Sair
+                    </Button>
+                    <Button variant="primary" onClick={this.handleSaveRemove}>
+                        Confirmar
+                    </Button>
+                    </Modal.Footer>
+                </Modal>
                 {
                     (this.state.validated == false && this.state.dNoneCustom == false) ? <Alert key='success' variant='success' show="true">Operação efetuada com sucesso!</Alert> : ''
                 }
@@ -538,10 +587,10 @@ class Users extends React.Component{
 
                 <Form>
                     <Form.Group className="mb-3" controlId="formBasicName">
-                        <Form.Control type="text" placeholder="Buscar" onChange={this.searchUsersWithParams}/>
+                        <Form.Control type="text" placeholder="Buscar" value={this.state.search} onChange={this.searchUsersWithParams}/>
 
                         <Form.Select aria-label="filter" value={this.state.filter} onChange={this.updateFilter}>
-                            <option>Campo</option>
+                            <option name="name">Campo</option>
                             <option value="name">Nome</option>
                             <option value="email">E-mail</option>
                             <option value="phone">Telefone</option>

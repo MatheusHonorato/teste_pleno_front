@@ -5,7 +5,6 @@ import About from './components/About';
 import {BrowserRouter, Routes, Link, Route} from 'react-router-dom';
 import {Nav} from 'react-bootstrap';
 import 'bootstrap/dist/css/bootstrap.min.css';
-import { Teste } from 'components/Teste';
 
 function App() {
   return (
