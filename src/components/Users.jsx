@@ -174,6 +174,7 @@ class Users extends React.Component{
                     <th>Telefone</th>
                     <th>Nascimento</th>
                     <th>Cidade</th>
+                    <th></th>
                 </tr>
             </thead>
             <tbody>
