@@ -1,70 +1,136 @@
-# Getting Started with Create React App
+# Desafio | Fullstack
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+O teste consiste em implementar uma lista de contatos e empresas. O projeto, obrigatoriamente, deve ser separado em backend e frontend.
 
-## Available Scripts
+## Backend
 
-In the project directory, you can run:
+O backend **deve** ser desenvolvido em `php` e **deve** conter uma API Rest.
 
-### `npm start`
+O sistema deve conter as seguintes entidades e seus respectivos campos:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+- Usuário
+    - Nome: obrigatório para preenchimento
+    - E-mail: obrigatório para preenchimento
+    - Telefone: não obrigatório
+    - Data de nascimento: não obrigatório
+    - Cidade onde nasceu: não obrigatório
+    - Empresas: obrigatório para preenchimento
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+- Empresa
+    - Nome: obrigatório para preenchimento
+    - CNPJ: obrigatório para preenchimento
+    - Endereço: obrigatório para preenchimento
+    - Usuários: obrigatório para preenchimento
 
-### `npm test`
+A regra de relacionamento para `Usuário` e `Empresa` deve ser de __n para n__
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+### Banco
+Você **deve** utilizar um banco de dados para o sistema. Pode-se escolher qualquer opção que desejar, mas o seguite cenário deve ser levado em consideração:
+- O sistema lida com informações sensíveis e preza pela integridade dos dados
+- O sistema lida com diferentes entidades relacionadas
 
-### `npm run build`
+Pedimos para que nos sinalize o motivo da escolha do banco no final do documento
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+O banco de dados escolhido foi o MySQL. O banco de dados MySQL já tem se consolidado no mercado como um banco de dados robusto e seguro, sendo ideal para utilização em sistemas que lidam com dados sensiveis e integridade de dados. Além disso
+o MySQL possui o recurso de transactions que é essencial para atomicidade das operações realizadas no banco possibilitando maior garantia de consistência dos dados. O banco mysql possui quando habilitado na criação de suas tabelas ENGINE=InnoDB,
+o uso de chaves estrangeiras, essencial para trabalhar com bancos que possuem diferentes entidades relacionadas.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Frontend
+O frontend **deve** ser desenvolvido utilizando `react` e **deve** usar os dados fornecidos pela API.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+Você **pode** e, de preferência, **deve** utilizar bibliotecas de terceiros.
 
-### `npm run eject`
+Deve-se desenvolver uma página de formulário para cada uma das entidades (`Usuario` e `Empresa`). Também deve ser desenvolvida uma página listando todos os usuários e seus respectivos campos, inclusive todas as empresas de que ele faz parte.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Deve-se ter a possibilidade de filtrar os dados conforme cada um dos campos.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+Obs: para facilitar, segue uma proposta de layout, você tem liberdade para desenvolver o layout da forma que achar mais adequado.
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+## Testes
+Testes unitários **devem** ser implementados no backend para validação das operações do CRUD.
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
+Testes unitários **devem** ser implementados no frontend para a tela de exibição dos usuários.
 
-## Learn More
+Você pode utilizar o framework de sua preferência tanto para o backend quanto para o frontend.
 
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
+## Ambiente
+Aqui na Contato Seguro, utilizamos __Docker__ nos nossos ambientes, então será muito bem visto caso decida utilizar. Principalmente para que tenhamos o mesmo resultado (mesma configuração de ambiente). Caso desenvolva com docker, nos envie junto com o projeto o `docker-compose.yml` e/ou os `Dockerfile´`s.
 
-To learn React, check out the [React documentation](https://reactjs.org/).
+## Requisitos mínimos
+- As 4 operações CRUD, tanto para entidade `Usuário`, quanto para `Empresa`. Todas as operações devem ter rotas específicas no backend.
+- O filtro de registros
+- Código legível, limpo e seguindo boas práticas de Orientação a Objetos
+- Um dump ou DDL do banco de dados
+- Testes unitários
 
-### Code Splitting
+## Requisitos bônus
+- Utilizar Docker
+- Outras entidades e relacionamento entre entidades. Por exemplo: uma entidade `Relatos` ou `Atividades` que tenha `Usuários` e/ou `Empresas` vinculadas.
+- Separação em commits, especialmente com boas mensagens de identificação.
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
+# Resposta do participante
 
-### Analyzing the Bundle Size
+## Tutorial de como rodar o front-end da aplicação(API):
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
+### Softwares necessários
 
-### Making a Progressive Web App
+- Node >= v16.17.0
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
+### Paso a passo
 
-### Advanced Configuration
+- Instalando
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
+Se possui o git instalado:
 
-### Deployment
+Clone o repositório em: https://github.com/MatheusHonorato/teste_pleno_front
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
+Se não possui o git instalado:
 
-### `npm run build` fails to minify
+Acesse:  https://github.com/MatheusHonorato/teste_pleno_front
 
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+Clique em: CODE > Download ZIP
+
+- Rodando
+
+Após efetuar o download do projeto é necessário executar os seguintes passos:
+
+- Acesse a raiz do projeto
+- copie o arquivo '.env-example' e renomeie para '.env'
+- Rode o comando 'npm i' para instalar as dependencias
+- Rode o comando 'npm start' para carregar o projeto
+- Após alguns segundos o projeto já deve abrir no seu navegador no endereço 'http://localhost:3000/' ou na próxima porta disponível no sistema (verifique a porta no console) 
+- Caso tenha sido necessario mudar a porta da api, atualize a constante: REACT_APP_BASE_URL no arquivo .env com o novo endereço.
+
+Para rodar os testes execute: 'npm test -- --coverage'
+
+## Um pouco sobre a aplicação (Front-End)
+
+Stack utilizada:
+
+- HTMl 5
+- CSS 3
+- Javascript
+- ReactJS
+
+Pacotes extra:
+
+- bootstrap
+- react-bootstrap
+- jest
+
+Descrição
+
+A aplicação foi desenvolvida utilizando orientação a objetos e o padrão de componentes baseados em classes no reactjs. Para uma melhor organização os testes foram organizados no mesmo padrão hierarquico dos componentes.
+
+## Pricipais dificuldades e duvidas
+
+A principal dificuldade durante o desenvolvimento foi a expertise na tecnologia atual ReactJS por estar a um bom tempo sem utiliza-lo.
+
+## Melhorias propostas
+
+- Melhor organização dos componentes isolando itens como modal.
+- Utilização de componentes baseados em funções
+- Utilização de typescript para um melhor debug da aplicação
+- Utilização de pacote para validações
+- Melhor gerenciamento de estados utilizando reatividade de maneira mais consolidada não tendo que recarregar todo um componente após uma atualização, mas sim unicamente os itens necessários.
+- Maior cobertura de testes.
