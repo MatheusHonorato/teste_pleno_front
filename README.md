@@ -101,6 +101,8 @@ Após efetuar o download do projeto é necessário executar os seguintes passos:
 - Após alguns segundos o projeto já deve abrir no seu navegador no endereço 'http://localhost:3000/' ou na próxima porta disponível no sistema (verifique a porta no console) 
 - Caso tenha sido necessario mudar a porta da api, atualize a constante: REACT_APP_BASE_URL no arquivo .env com o novo endereço.
 
+Para rodar os testes execute: 'npm test -- --coverage'
+
 ## Um pouco sobre a aplicação (Front-End)
 
 Stack utilizada:
@@ -122,7 +124,7 @@ A aplicação foi desenvolvida utilizando orientação a objetos e o padrão de 
 
 ## Pricipais dificuldades e duvidas
 
-A principal dificuldade durante o desenvolvimento foi a expertise no framework atual ReactJS por estar a um bom tempo sem utiliza-lo.
+A principal dificuldade durante o desenvolvimento foi a expertise na tecnologia atual ReactJS por estar a um bom tempo sem utiliza-lo.
 
 ## Melhorias propostas
 
